@@ -1,34 +1,55 @@
 {
-  "name": "@nota/rxjs-operators",
-  "version": "0.0.3",
-  "description": "A collection of operators for rxjs used by @nota",
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
-  "scripts": {
-    "prepublish": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": {
     "name": "nota",
     "url": "http://nota.dk"
   },
   "contributors": [
     {
-      "name": "Daniel Dam Freiling",
-      "email": "dfg@nota.dk"
+      "email": "dfg@nota.dk",
+      "name": "Daniel Dam Freiling"
     },
     {
+      "email": "m_abs@mabs.dk",
       "name": "Morten Anton Bach Sjøgren",
-      "url": "http://mabs.dk",
-      "email": "m_abs@mabs.dk"
+      "url": "http://mabs.dk"
     }
   ],
-  "license": "MIT",
   "dependencies": {
     "rxjs": "^5.0.0"
   },
+  "description": "A collection of operators for rxjs used by @nota",
   "devDependencies": {
+    "mocha": "^3.2.0",
+    "npm-run-all": "^4.0.1",
+    "npm-scripts-info": "^0.3.6",
+    "shx": "^0.2.2",
     "ts-node": "^2.0.0",
-    "typescript": "^2.1.5"
-  }
+    "typescript": "^2.1.5",
+    "typings": "^2.1.0"
+  },
+  "license": "MIT",
+  "main": "lib/index.js",
+  "name": "@nota/rxjs-operators",
+  "scripts": {
+    "build_cjs": "npm-run-all clean_dist_cjs copy_src_cjs compile_dist_cjs",
+    "build_spec": "tsc --project ./spec --pretty",
+    "build_test": "shx rm -rf ./dist/ && npm-run-all build_cjs clean_spec build_spec test_mocha",
+    "clean_dist_cjs": "shx rm -rf ./dist/cjs",
+    "clean_spec": "shx rm -rf spec-js",
+    "compile_dist_cjs": "tsc ./dist/cjs/src/index.ts                         -m commonjs --lib es5,es2015.iterable,es2015.collection,es2015.promise,dom --sourceMap --outDir ./dist/cjs --target ES5 -d --diagnostics --pretty --noImplicitAny --noImplicitReturns --noImplicitThis --suppressImplicitAnyIndexErrors --moduleResolution node",
+    "copy_src_cjs": "mkdirp ./dist/cjs/src && shx cp -r ./src/* ./dist/cjs/src",
+    "prepublish": "shx rm -rf ./typings && typings install && tsc",
+    "test": "npm run build_test",
+    "test_mocha": "mocha --opts spec/support/default.opts spec-js"
+  },
+  "scripts-info": {
+    "build_cjs": "Build CJS package with clean up existing build, copy source into dist",
+    "build_spec": "Build test specs",
+    "clean_dist_cjs": "Clean up existing CJS package output",
+    "clean_spec": "Clean up existing test spec build output",
+    "compile_dist_cjs": "Compile codebase into CJS module",
+    "test_mocha": "Execute mocha test runner against existing test spec build"
+  },
+  "typings": "lib/index.d.ts",
+  "version": "0.0.3"
 }
